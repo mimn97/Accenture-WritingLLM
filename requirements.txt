@@ -1,8 +1,5 @@
+difflib
 streamlit
-numpy
-pandas
 nltk
 openai
-matplotlib
-difflib
 boto3
