@@ -1,4 +1,3 @@
-difflib
 streamlit
 nltk
 openai
