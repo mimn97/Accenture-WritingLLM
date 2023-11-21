@@ -126,12 +126,14 @@ class RevisionAnnotation():
             st.markdown(f"<h3> Sentence </h3>", unsafe_allow_html=True)
             st.markdown(f"<div style='border: 2px solid blue; padding: 10px;'>{self.annotation_targets}</div>", unsafe_allow_html=True)
             st.markdown(f"""
+                        <br>
                         <mark>Note: The removed span of texts in the original text were <u>crossed out</u>, while newly added edits from you are colored in <b style="color:red">red</b>. </mark>
-                        """, unsafe_allow_html=True)
+                        <br>""", unsafe_allow_html=True)
             # Intention text box
-            edit_intention = st.text_area("Give Your Reasons Behind those Edits. (If you don't see any edits, then write N/A .)", 
+            st.markdown(f"<br>", unsafe_allow_html=True)
+            edit_intention = st.text_area("Give Your Reasons Behind those Edits in Standard English (If you don't see any edits, then write N/A .)", 
                                                 height=100, max_chars=700, 
-                                                placeholder="e.g., Make the sentence sound more catchy to customer, etc.")
+                                                placeholder="e.g., I want the sentence to sound more catchy to customer.")
                 
             # if 'edit_intention'
 
@@ -158,7 +160,7 @@ class RevisionAnnotation():
                 label_annotations['other'] = other
                 label_annotations['na'] = na
 
-            st.markdown("------")
+                st.markdown("<br><p> Please only click Next if you confirm your responses. There is no way to revise your edits after.</p>", unsafe_allow_html=True)
 
             save_btn_submit = form.form_submit_button("Next")
 
@@ -195,43 +197,41 @@ class RevisionAnnotation():
         else:
             st.success("Congratulation. You have finished your tasks. ", icon="👍") 
 
-# def main():
-
-#     st.set_page_config(page_title="Annotate Your Edits")
-#     demo = RevisionAnnotation()
 
 def main():
 
-    st.set_page_config(page_title="Annotate Your Edits")
-    
-    # Brief Explanation
-    st.markdown("<h2> Annotate Your Edits </h2>", unsafe_allow_html=True)
-    st.markdown("""
-            <br> Now, it's time to give your opinions and reasons about the edits that you have made on the original GPT-4 text.
-            We would like to take a deeper look at your intention behind those edits. 
-            <br>
-            Here are the detailed instructions:
-            <ol>
-                <li> First, you will see each sentence with your revision. At the below textbox, give your reason why you have changed like that." </li>
-                <li> Then, select checkboxes that apply to your intentions. </li>
-                <li> After clicking all checkboxes in a sentence, then go to the next button to see the next sentence. </li>
-            </ol>
-            <br>
-            <p> <span style="color:red"> WARNING: </span> There is no 'back' button to change your response in the previsou sentences. Please make sure to review your responses and then go to the next sentence. </p>
-            <hr>
-            """, unsafe_allow_html=True)
+    st.set_page_config(page_title="Annotate Your Edits", layout="wide")
 
-    # Create two columns
-    col1, col2 = st.columns(2)
+    if 'visual_edit' not in st.session_state:
+        st.markdown("<p> No edits have been made yet. Please navigate to Revise GPT-4 Texts page. </p>", unsafe_allow_html=True)
+    else:
+        st.markdown("<h2> Annotate Your Edits </h2>", unsafe_allow_html=True)
+        st.markdown("""
+                <br> Now, it's time to give your opinions and reasons about the edits that you have made on the original GPT-4 text.
+                We would like to take a deeper look at your intention behind those edits. 
+                <br>
+                Here are the detailed instructions:
+                <ol>
+                    <li> First, you will see each sentence with your revision. At the below text box, give your reason or rationale behind the edits you made. </li>
+                    <li> Then, select every checkboxes that apply to your intentions of making the edits to that sentence. </li>
+                    <li> After clicking all checkboxes in a sentence, then go to the next button to see the next sentence. </li>
+                </ol>
+                <br>
+                <p> <span style="color:red"> WARNING: </span> There is <b>no 'back' button</b> to change your response. Please make sure to review your responses and then go to the next sentence. </p>
+                <hr>
+                """, unsafe_allow_html=True)
 
-    # In the left column, show st.session_state.visual_edit
-    with col1:
-        st.markdown("<h2>Visual Edit</h2>", unsafe_allow_html=True)
-        st.markdown(st.session_state.visual_edit, unsafe_allow_html=True)
+        # Create two columns
+        col1, col2 = st.columns(2)
 
-    # In the right column, show the rest of the interface
-    with col2:
-        demo = RevisionAnnotation()
+        # In the left column, show st.session_state.visual_edit
+        with col1:
+            st.markdown("<h2>Entire Passage</h2>", unsafe_allow_html=True)
+            st.markdown(st.session_state.visual_edit, unsafe_allow_html=True)
+
+        # In the right column, show the rest of the interface
+        with col2:
+            demo = RevisionAnnotation()
 
 if __name__ == '__main__':
     main()
